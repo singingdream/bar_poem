@@ -217,21 +217,20 @@ ul.rules li::before{
 .row dd{ margin: 0; color: var(--ink); }
 .row dd .sub{ display: block; font-size: 13px; color: var(--ink-faint); margin-top: 3px; }
 
-.tbd{
-  color: var(--accent); background: rgba(125,100,68,.09);
-  padding: 1px 7px; border: 1px dashed rgba(125,100,68,.4); font-size: 13px;
-}
 
 .ask{
   margin-top: 22px; font-size: 13px; color: var(--ink-faint);
 }
 
-.maplink{
-  display: inline-block; margin-top: 6px; padding: 9px 0;
+.maplink,
+.linkline{
+  display: inline-block; padding: 9px 0;
   font-size: 14px; color: var(--accent);
   text-decoration: none; border-bottom: 1px solid rgba(111,88,54,.4);
 }
-.maplink:hover{ border-bottom-color: var(--accent); }
+.maplink{ margin-top: 6px; }   /* 주소 아래에 붙을 때만 여백 */
+.maplink:hover,
+.linkline:hover{ border-bottom-color: var(--accent); }
 
 /* ── 좁은 화면 대응 ─────────────────────── */
 @media (max-width: 440px){
@@ -415,9 +414,7 @@ footer .fine{
     <dl class="rows">
       <div class="row"><dt>주소</dt><dd>서울 영등포구 은행로 3 지하1층 112호
         <a class="maplink" href="https://naver.me/Ge7vdEYf" target="_blank" rel="noopener">네이버 지도에서 열기 →</a></dd></div>
-      <div class="row"><dt>인스타그램</dt><dd><span class="tbd">
-        <a class="maplink" href="https://www.instagram.com/bar___poem" target="_blank" rel="noopener">@bar___poem →</a></dd></div>
-      </span></dd></div>
+      <div class="row"><dt>인스타그램</dt><dd><a class="linkline" href="https://www.instagram.com/bar___poem" target="_blank" rel="noopener">@bar___poem →</a></dd></div>
       <div class="row"><dt>영업시간</dt><dd>평일 19:00 – 23:00<span class="sub">주말은 대관 예약만 받습니다</span></dd></div>
     </dl>
     <p class="ask">예약과 문의는 인스타그램 DM으로 받고 있습니다.</p>
