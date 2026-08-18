@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BAR POEM — 위스키 &amp; 사케</title>
+<meta name="theme-color" content="#efe8d9">
+<meta name="description" content="평일 저녁, 한 잔의 시. BAR POEM의 위스키·사케 리스트와 이용 안내.">
+<link rel="icon" href="logo.jpg">
+<meta property="og:title" content="BAR POEM">
+<meta property="og:description" content="평일 저녁, 한 잔의 시. 위스키 &amp; 사케.">
+<meta property="og:type" content="website">
+<!-- 배포 도메인이 정해지면 아래 2줄을 절대 URL로 바꿔야 카톡/인스타 링크 미리보기가 뜹니다.
+     og:image는 상대경로가 안 먹고, 최소 200x200(권장 1200x630)이라 현재 150px 로고로는 불가.
+<meta property="og:url"   content="https://example.com/">
+<meta property="og:image" content="https://example.com/og.jpg">
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ─────────────────────────────────────────────
+   BAR POEM — single-file static page
+   수정 가이드:
+   · 메뉴  → "MENU START" 주석 블록 (월별 교체)
+   · 주소/연락처 → "CONTACT START" 주석 블록
+   ───────────────────────────────────────────── */
+
+:root{
+  color-scheme: light;
+  --paper:      #efe8d9;
+  --paper-deep: #e6ddca;
+  --ink:        #40311f;  /* 10.3:1 — 유지 */
+  --ink-soft:   #5c4b35;  /* 5.4 → 6.9:1 */
+  --ink-faint:  #6f6049;  /* 2.7 → 5.0:1  ← 모바일 가독성의 핵심 */
+  --rule:       #c7b79b;
+  --accent:     #6f5836;  /* 4.6 → 5.5:1 */
+
+  --serif-ko: "Gowun Batang", "Nanum Myeongjo", "AppleMyungjo", serif;
+  --serif-en: "Cormorant Garamond", "Gowun Batang", Georgia, serif;
+}
+
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  font-family: var(--serif-ko);
+  color: var(--ink);
+  background-color: var(--paper);
+  /* 종이 질감: 은은한 그라디언트 + 저대비 SVG 노이즈 (외부 파일 없음) */
+  background-image:
+    radial-gradient(120% 90% at 50% 0%, #f6f0e3 0%, rgba(246,240,227,0) 60%),
+    radial-gradient(100% 70% at 100% 100%, #e4d9c2 0%, rgba(228,217,194,0) 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;          /* 가로모드 자동 확대 방지 */
+  -webkit-tap-highlight-color: transparent; /* 탭 시 파란 플래시 제거 */
+}
+
+/* ── 공통 레이아웃 ───────────────────────── */
+.wrap{ max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+section{ padding: 68px 0; scroll-margin-top: 58px; }
+section + section{ border-top: 1px solid rgba(199,183,155,.55); }
+
+.eyebrow{
+  font-family: var(--serif-en);
+  font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--ink-faint); margin: 0 0 10px;
+}
+h2{
+  font-size: 22px; font-weight: 400; letter-spacing: .16em;
+  margin: 0 0 28px; color: var(--ink);
+}
+p{ margin: 0 0 16px; color: var(--ink-soft); }
+
+/* ── 상단 내비 ───────────────────────────── */
+nav{
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(239,232,217,.9);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(199,183,155,.6);
+}
+nav ul{
+  display: flex; gap: 2px; justify-content: center; flex-wrap: wrap;
+  margin: 0; list-style: none;
+  padding-left: max(10px, env(safe-area-inset-left));
+  padding-right: max(10px, env(safe-area-inset-right));
+}
+nav a{
+  display: block; padding: 14px 9px;   /* 탭 영역 ≈48px */
+  font-size: 12.5px; letter-spacing: .1em; color: var(--ink-soft);
+  text-decoration: none;
+}
+nav a:hover{ color: var(--ink); }
+
+/* ── 히어로 ──────────────────────────────── */
+header.hero{
+  padding: 92px 24px 78px; text-align: center;
+  position: relative;
+}
+header.hero::before,
+header.hero::after{
+  content: ""; position: absolute; left: 20px; right: 20px;
+  border: 1px solid var(--rule); pointer-events: none;
+}
+header.hero::before{ top: 18px; bottom: 18px; }
+header.hero::after{ top: 23px; bottom: 23px; border-color: rgba(199,183,155,.5); }
+
+.wordmark{
+  font-family: var(--serif-en); font-weight: 300;
+  font-size: clamp(38px, 11vw, 68px);
+  letter-spacing: .2em; margin: 0 0 4px 0;
+  text-indent: .2em; /* letter-spacing 보정 */
+  color: var(--ink);
+}
+.wordmark-sub{
+  font-family: var(--serif-en);
+  font-size: 11px; letter-spacing: .42em; text-transform: uppercase;
+  color: var(--ink-faint); margin: 0 0 30px; text-indent: .42em;
+}
+.hero-line{
+  width: 46px; height: 1px; background: var(--rule);
+  margin: 0 auto 28px;
+}
+.hero-verse{
+  font-size: 17px; color: var(--ink-soft); margin: 0 0 26px;
+  line-height: 2.1;
+}
+.hero-hours{
+  font-size: 14px; letter-spacing: .06em; color: var(--ink-faint); margin: 0;
+}
+.hero-hours strong{ font-weight: 400; color: var(--accent); }
+
+/* ── 메뉴 ────────────────────────────────── */
+.menu-group{ margin-bottom: 44px; }
+.menu-group:last-of-type{ margin-bottom: 0; }
+
+.menu-head{
+  display: flex; align-items: baseline; gap: 14px;
+  padding-bottom: 8px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.menu-head h3{
+  font-size: 17px; font-weight: 400; letter-spacing: .14em; margin: 0;
+}
+.menu-head .label{
+  margin-left: auto; font-size: 12px; letter-spacing: .12em; color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.menu-item{
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 7px 0; font-size: 15px;
+}
+.menu-item .name{ color: var(--ink); }
+.menu-item .dots{
+  flex: 1; min-width: 16px; height: 1px; align-self: flex-end;
+  margin-bottom: 5px;
+  background-image: linear-gradient(to right, var(--rule) 0 2px, transparent 2px 5px);
+  background-size: 5px 1px; background-repeat: repeat-x;
+  opacity: .8;
+}
+.menu-item .price{
+  color: var(--ink-soft); font-variant-numeric: tabular-nums;
+  white-space: nowrap; font-size: 14px;
+}
+
+.menu-note{
+  margin-top: 30px; padding-top: 18px; border-top: 1px solid rgba(199,183,155,.55);
+  font-size: 13.5px; color: var(--ink-faint); text-align: center;
+}
+
+/* ── 안내 카드 ───────────────────────────── */
+.keys{
+  display: grid; gap: 14px; grid-template-columns: 1fr 1fr;
+  margin: 0 0 30px;
+}
+@media (max-width: 560px){ .keys{ grid-template-columns: 1fr; } }
+
+.key{
+  border: 1px solid var(--rule); padding: 18px 20px;
+  background: rgba(255,252,244,.42);
+}
+.key .k{
+  font-size: 11px; letter-spacing: .2em; color: var(--ink-faint);
+  text-transform: uppercase; margin: 0 0 6px;
+}
+.key .v{ font-size: 15px; color: var(--ink); margin: 0; line-height: 1.6; }
+
+ul.rules{ margin: 0; padding: 0; list-style: none; }
+ul.rules li{
+  position: relative; padding-left: 18px; margin-bottom: 10px;
+  font-size: 15px; color: var(--ink-soft);
+}
+ul.rules li::before{
+  content: "·"; position: absolute; left: 4px; top: -1px; color: var(--rule); font-size: 18px;
+}
+
+/* ── 정보 행 (멤버십 / 대관 / 위치) ──────── */
+.rows{ margin: 0; }
+.row{
+  display: flex; gap: 16px; padding: 12px 0;
+  border-bottom: 1px solid rgba(199,183,155,.45);
+  font-size: 15px;
+}
+.row:last-child{ border-bottom: 0; }
+.row dt{
+  flex: 0 0 118px; color: var(--ink-faint); font-size: 13.5px; letter-spacing: .06em;
+  margin: 0; padding-top: 2px;
+}
+.row dd{ margin: 0; color: var(--ink); }
+.row dd .sub{ display: block; font-size: 13px; color: var(--ink-faint); margin-top: 3px; }
+
+.tbd{
+  color: var(--accent); background: rgba(125,100,68,.09);
+  padding: 1px 7px; border: 1px dashed rgba(125,100,68,.4); font-size: 13px;
+}
+
+.ask{
+  margin-top: 22px; font-size: 13px; color: var(--ink-faint);
+}
+
+.maplink{
+  display: inline-block; margin-top: 6px; padding: 9px 0;
+  font-size: 14px; color: var(--accent);
+  text-decoration: none; border-bottom: 1px solid rgba(111,88,54,.4);
+}
+.maplink:hover{ border-bottom-color: var(--accent); }
+
+/* ── 좁은 화면 대응 ─────────────────────── */
+@media (max-width: 440px){
+  .wrap{ padding: 0 18px; }
+  section{ padding: 52px 0; }
+  .row{ flex-direction: column; gap: 2px; padding: 12px 0; }
+  .row dt{ flex: none; }
+  .menu-item{ font-size: 14.5px; }
+  .menu-item .name{ flex: 1 1 auto; }
+  .menu-item .dots{ display: none; }
+  .menu-item{ justify-content: space-between; }
+  nav ul{
+    gap: 0; flex-wrap: nowrap; justify-content: flex-start;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  nav ul::-webkit-scrollbar{ display: none; }
+  nav a{ padding: 13px 12px; font-size: 12px; letter-spacing: .04em; white-space: nowrap; }
+  header.hero{ padding: 74px 18px 62px; }
+}
+
+/* ── 푸터 ────────────────────────────────── */
+footer{
+  text-align: center;
+  padding: 54px 24px calc(64px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(199,183,155,.55);
+}
+footer .mark{
+  font-family: var(--serif-en); font-weight: 300;
+  font-size: 19px; letter-spacing: .3em; text-indent: .3em;
+  color: var(--ink-soft); margin: 0;
+}
+footer .fine{
+  font-size: 12px; color: var(--ink-faint); letter-spacing: .08em; margin: 14px 0 0;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="#about">소개</a></li>
+    <li><a href="#menu">메뉴</a></li>
+    <li><a href="#guide">이용 안내</a></li>
+    <li><a href="#membership">멤버십</a></li>
+    <li><a href="#rental">대관</a></li>
+    <li><a href="#contact">위치</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <h1 class="wordmark">BAR POEM</h1>
+  <p class="wordmark-sub">Whisky &amp; Poem</p>
+  <div class="hero-line"></div>
+  <p class="hero-verse">
+    한 잔에 한 줄씩,<br>
+    조용히 읽히는 저녁.
+  </p>
+  <p class="hero-hours"><strong>평일 19:00 – 23:00</strong> &nbsp;·&nbsp; 주말은 대관 전용</p>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <p class="eyebrow">About</p>
+    <h2>바 포엠</h2>
+    <p>
+      싱글 캐스크 위스키와 나마자케를 한 병씩 골라 두는 작은 바입니다.
+      매달 리스트를 새로 씁니다. 지난달의 잔은 다음 달에 없을 수도 있습니다.
+    </p>
+    <p>
+      떠들썩한 자리보다 잔에 집중하는 자리에 가깝습니다.
+      혼자 와서 한 잔 두고 앉아 있어도 좋고, 둘이 와서 나눠 마셔도 좋습니다.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ MENU START — 월별 교체 구간 ══════════
+     · 리스트가 바뀌면 아래 .menu-group 블록만 수정하세요.
+     · 가격은 실제 판매가(원)를 그대로 적습니다. -->
+<section id="menu">
+  <div class="wrap">
+    <p class="eyebrow">Menu</p>
+    <h2>메뉴</h2>
+
+    <div class="menu-group">
+      <div class="menu-head"><h3>취급 주류</h3><span class="label">판매가</span></div>
+      <div class="menu-item"><span class="name">아사히 슈퍼 드라이</span><span class="dots"></span><span class="price">6,000원</span></div>
+      <div class="menu-item"><span class="name">아사히 뮌헨 아퀼라</span><span class="dots"></span><span class="price">7,000원</span></div>
+      <div class="menu-item"><span class="name">가쿠빈 하이볼</span><span class="dots"></span><span class="price">6,000원</span></div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-head"><h3>8월 리스트</h3><span class="label">판매가</span></div>
+      <div class="menu-item"><span class="name">BB&amp;R 블루행어 26년</span><span class="dots"></span><span class="price">16,000원</span></div>
+      <div class="menu-item"><span class="name">WM 클라이낼리쉬 20년</span><span class="dots"></span><span class="price">30,000원</span></div>
+      <div class="menu-item"><span class="name">노스스타 임페리얼 24년</span><span class="dots"></span><span class="price">55,000원</span></div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-head"><h3>9월 리스트</h3><span class="label">판매가</span></div>
+      <div class="menu-item"><span class="name">시크릿 하이랜드 20년</span><span class="dots"></span><span class="price">14,000원</span></div>
+      <div class="menu-item"><span class="name">혼스피릿 아드모어 26년</span><span class="dots"></span><span class="price">37,000원</span></div>
+      <div class="menu-item"><span class="name">트레져 리큐르 캐레비안 럼 30년</span><span class="dots"></span><span class="price">18,000원</span></div>
+      <div class="menu-item"><span class="name">산시바 자포니즘 스트라스아일라 35년</span><span class="dots"></span><span class="price">95,000원</span></div>
+      <div class="menu-item"><span class="name">아쿠아비테 스프링뱅크 26년</span><span class="dots"></span><span class="price">95,000원</span></div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-head"><h3>사케</h3><span class="label">판매가</span></div>
+      <div class="menu-item"><span class="name">하나가키 코시노시즈쿠 쥰마이 무로카나마겐슈</span><span class="dots"></span><span class="price">7,000원</span></div>
+      <div class="menu-item"><span class="name">쿠로우시 쥰긴 오마치 나마겐슈</span><span class="dots"></span><span class="price">9,000원</span></div>
+      <div class="menu-item"><span class="name">시치다 쥰긴 오마치50 무로카나마</span><span class="dots"></span><span class="price">11,000원</span></div>
+      <div class="menu-item"><span class="name">치요무스비 히토키와 토쿠베츠쥰마이 나마</span><span class="dots"></span><span class="price">8,000원</span></div>
+      <div class="menu-item"><span class="name">미즈오 토쿠베츠 킨몬니시키 나마자케</span><span class="dots"></span><span class="price">9,000원</span></div>
+      <div class="menu-item"><span class="name">토쿠베츠쥰마이 히노마루 하이퍼 드라이</span><span class="dots"></span><span class="price">10,000원</span></div>
+    </div>
+
+    <p class="menu-note">리스트는 매달 바뀝니다. 재고 소진 시 조기 마감될 수 있습니다.</p>
+  </div>
+</section>
+<!-- ══════════ MENU END ══════════ -->
+
+<section id="guide">
+  <div class="wrap">
+    <p class="eyebrow">Guide</p>
+    <h2>이용 안내</h2>
+
+    <div class="keys">
+      <div class="key">
+        <p class="k">주문</p>
+        <p class="v">1인 1주류 이상 필수<br>안주는 주문하지 않으셔도 됩니다</p>
+      </div>
+      <div class="key">
+        <p class="k">콜키지</p>
+        <p class="v">병당 10,000원<br>3병 이상 30,000원 고정</p>
+      </div>
+    </div>
+
+    <ul class="rules">
+      <li>만석일 때 추가 주문이 없으면 이용은 최대 2시간까지 부탁드립니다.</li>
+      <li>잔과 집기가 얇습니다. 다루실 때 조금만 조심해 주세요. 브로큰 차지는 받지 않습니다.</li>
+      <li>향이 강한 안주는 옆자리를 위해 지양해 주세요.</li>
+      <li>많이 취하신 경우 안전을 위해 귀가를 권해 드릴 수 있습니다.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="membership">
+  <div class="wrap">
+    <p class="eyebrow">Membership</p>
+    <h2>멤버십</h2>
+    <dl class="rows">
+      <div class="row"><dt>콜키지</dt><dd>본인 콜키지 프리<span class="sub">1인 1주류 주문 조건은 동일합니다</span></dd></div>
+      <div class="row"><dt>전용 리스트</dt><dd>멤버십 전용 초고숙성 위스키</dd></div>
+      <div class="row"><dt>시음회</dt><dd>우선 참여권 &amp; 참가 할인</dd></div>
+      <div class="row"><dt>하이볼</dt><dd>차지 2,000원</dd></div>
+      <div class="row"><dt>그리고</dt><dd>주인장의 어떠한 무언가 서비스</dd></div>
+      <div class="row"><dt>가입비</dt><dd>문의 부탁드립니다</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="rental">
+  <div class="wrap">
+    <p class="eyebrow">Rental</p>
+    <h2>대관</h2>
+    <dl class="rows">
+      <div class="row"><dt>평일 낮</dt><dd>09:00 – 17:00</dd></div>
+      <div class="row"><dt>평일 저녁</dt><dd>18:00 – 24:00</dd></div>
+      <div class="row"><dt>주말</dt><dd>14:00 – 22:00</dd></div>
+      <div class="row"><dt>비용</dt><dd>문의 부탁드립니다</dd></div>
+    </dl>
+    <p class="ask">시음회, 소모임, 촬영 등 문의 주시면 시간대를 맞춰 드립니다.</p>
+  </div>
+</section>
+
+<!-- ══════════ CONTACT START — 실제 정보로 교체 필요 ══════════ -->
+<section id="contact">
+  <div class="wrap">
+    <p class="eyebrow">Location</p>
+    <h2>위치 &amp; 연락처</h2>
+    <dl class="rows">
+      <div class="row"><dt>주소</dt><dd>서울 영등포구 은행로 3 지하1층 112호
+        <a class="maplink" href="https://naver.me/Ge7vdEYf" target="_blank" rel="noopener">네이버 지도에서 열기 →</a></dd></div>
+      <div class="row"><dt>인스타그램</dt><dd><span class="tbd">
+        <a class="maplink" href="https://www.instagram.com/bar___poem" target="_blank" rel="noopener">@bar___poem →</a></dd></div>
+      </span></dd></div>
+      <div class="row"><dt>영업시간</dt><dd>평일 19:00 – 23:00<span class="sub">주말은 대관 예약만 받습니다</span></dd></div>
+    </dl>
+    <p class="ask">예약과 문의는 인스타그램 DM으로 받고 있습니다.</p>
+  </div>
+</section>
+<!-- ══════════ CONTACT END ══════════ -->
+
+<footer>
+  <p class="mark">BAR POEM</p>
+  <p class="fine">청소년에게 주류를 판매하지 않습니다</p>
+</footer>
+
+</body>
+</html>
